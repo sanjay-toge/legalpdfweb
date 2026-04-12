@@ -693,6 +693,130 @@
             text-decoration: none;
             color: var(--text-primary);
         }
+
+        /* --- Modal --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 15, 30, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            transform: translateY(20px);
+            transition: var(--transition);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+            color: var(--accent-gold);
+            font-family: 'DM Serif Display', serif;
+            font-weight: 400;
+        }
+
+        .modal-content > p {
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1rem;
+        }
+
+        .modal-steps {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .modal-steps h4 {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .modal-steps ol {
+            padding-left: 20px;
+            color: var(--text-secondary);
+        }
+
+        .modal-steps li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .modal-steps strong {
+            color: var(--text-primary);
+        }
+
+        .modal-footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #34d399; /* Green for safety */
+            margin-bottom: 25px;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .modal-btn-close {
+            display: block;
+            width: 100%;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
     </style>
 </head>
 
@@ -926,6 +1050,29 @@
         </div>
     </section>
 
+    <!-- SmartScreen Warning Modal -->
+    <div id="smartscreen-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div class="modal-icon">🛡️</div>
+            <h3>Having trouble downloading?</h3>
+            <p>Windows SmartScreen may flag new software from independent publishers. This is normal for new apps.</p>
+            <div class="modal-steps">
+                <h4>To install safely:</h4>
+                <ol>
+                    <li>Click <strong>"Download Free Trial"</strong></li>
+                    <li>If SmartScreen appears, click <strong>"More info"</strong></li>
+                    <li>Click <strong>"Run anyway"</strong></li>
+                    <li>Installation will proceed normally</li>
+                </ol>
+            </div>
+            <div class="modal-footer">
+                <p><strong>Legal PDF Studio contains no malware.</strong><br>Your data never leaves your machine.</p>
+            </div>
+            <button class="btn-small btn-gold modal-btn-close">Got it</button>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
         <div class="footer-grid">
@@ -1026,6 +1173,33 @@
                 header.style.backgroundColor = 'rgba(10, 15, 30, 0.8)';
             }
         });
+
+        // SmartScreen Modal Logic
+        const modal = document.getElementById('smartscreen-modal');
+        const modalCloseBtn = document.querySelector('.modal-close');
+        const modalGotItBtn = document.querySelector('.modal-btn-close');
+
+        // Show modal when download buttons are clicked
+        document.querySelectorAll('a[download]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                modal.classList.add('active');
+            });
+        });
+
+        // Close modal functions
+        const closeModal = () => modal.classList.remove('active');
+
+        if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+        if (modalGotItBtn) modalGotItBtn.addEventListener('click', closeModal);
+
+        // Close on outside click
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+        }
     </script>
 </body>
 
