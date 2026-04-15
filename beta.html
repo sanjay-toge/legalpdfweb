@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal PDF Studio v2 Beta | Advanced Legal PDF Processing</title>
+    <meta name="description" content="Legal PDF Studio v2 Beta is the next-generation legal document processing experience with AI-powered splitting, redaction, binder building, and secure export.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-primary: #070B17;
+            --bg-secondary: #111827;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --accent-gold: #F59E0B;
+            --accent-blue: #60A5FA;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border: rgba(255, 255, 255, 0.08);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 22px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(7, 11, 23, 0.88);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.35rem;
+        }
+
+        .logo img {
+            width: 34px;
+            height: 34px;
+        }
+
+        nav {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--accent-gold);
+        }
+
+        .btn-small {
+            padding: 10px 18px;
+            border-radius: 999px;
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            color: var(--accent-gold);
+            font-weight: 600;
+            background: rgba(245, 158, 11, 0.08);
+        }
+
+        main {
+            padding: 160px 5% 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 50px;
+            align-items: center;
+            margin-bottom: 80px;
+        }
+
+        .hero h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(3rem, 5vw, 4.5rem);
+            line-height: 1.05;
+            margin-bottom: 24px;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 680px;
+            margin-bottom: 30px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 16px 32px;
+            border-radius: 14px;
+            background: var(--accent-gold);
+            color: #000;
+            font-weight: 700;
+        }
+
+        .btn-secondary {
+            padding: 16px 32px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 18px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 32px;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            border-color: rgba(96, 165, 250, 0.35);
+            transform: translateY(-6px);
+        }
+
+        .feature-card h3 {
+            margin-bottom: 16px;
+            font-size: 1.35rem;
+            color: #fff;
+        }
+
+        .feature-card p,
+        .feature-card ul {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .feature-card ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 12px;
+        }
+
+        .feature-card ul li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .feature-card ul li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent-gold);
+        }
+
+        .section-intro {
+            margin-bottom: 40px;
+        }
+
+        .ai-callout {
+            display: grid;
+            gap: 16px;
+            padding: 32px;
+            margin-bottom: 44px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(245, 158, 11, 0.12));
+            border: 1px solid rgba(96, 165, 250, 0.2);
+        }
+
+        .ai-callout h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .ai-callout p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            max-width: 780px;
+        }
+
+        .ai-callout-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .ai-feature {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 24px;
+        }
+
+        .ai-feature h3 {
+            margin-bottom: 12px;
+            font-size: 1.25rem;
+            color: #fff;
+        }
+
+        .ai-feature p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .section-intro h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 3rem;
+            margin-bottom: 14px;
+        }
+
+        .section-intro p {
+            color: var(--text-secondary);
+            max-width: 700px;
+        }
+
+        .beta-banner {
+            margin-bottom: 28px;
+            padding: 18px 24px;
+            border-radius: 18px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.22);
+            color: #F8FAFC;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        @media (max-width: 960px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .feature-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            header {
+                padding: 18px 5%;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <img src="assets/logo.png" alt="Legal PDF Studio Logo">
+            <span>Legal PDF Studio</span>
+        </a>
+        <nav>
+            <a class="nav-link" href="index.html">Stable</a>
+            <a class="nav-link active" href="beta.html">v2 Beta</a>
+            <a class="btn-small" href="index.html#download">Download</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div>
+                <div class="beta-banner">Version 2 Beta — available now for preview and feedback.</div>
+                <h1>Legal PDF Studio v2 Beta</h1>
+                <p>Explore the next generation of legal document processing with advanced AI-assisted splitting, redaction automation, binder assembly, and secure export workflows built for litigation support.</p>
+                <div class="hero-actions">
+                    <a href="index.html" class="btn-secondary">Back to Stable</a>
+                    <a href="https://github.com/sanjay-toge/legalpdfweb/releases/download/v1.0.0/LegalPdfStudio_v1.0.1.exe" class="btn-primary" download>Download v2 Beta</a>
+                </div>
+            </div>
+            <div>
+                <img src="assets/hero_mockup_v2.png" alt="Legal PDF Studio v2 Beta" style="width:100%; border-radius: 24px; border: 1px solid var(--border);">
+            </div>
+        </section>
+
+        <section class="ai-callout">
+            <h2>AI-Powered Legal PDF Processing</h2>
+            <p>Legal PDF Studio v2 Beta includes two built-in AI workflows that keep processing local while reducing manual review time and improving consistency.</p>
+            <div class="ai-callout-grid">
+                <div class="ai-feature">
+                    <h3>AI-Based Redaction</h3>
+                    <p>Automatically detect sensitive terms and suggest redactions so you can review and apply them faster with greater accuracy.</p>
+                </div>
+                <div class="ai-feature">
+                    <h3>AI-Based Split</h3>
+                    <p>Use local LLama model analysis to identify logical document boundaries and split long PDFs by meaningful sections instead of just page counts.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-intro">
+            <h2>Core Beta Capabilities</h2>
+            <p>Legal PDF Studio v2 continues the secure, local-first workflow while adding stronger AI, project controls, and export automation for law firms and litigation support teams.</p>
+        </section>
+
+        <div class="feature-list">
+            <article class="feature-card">
+                <h3>Project Management</h3>
+                <ul>
+                    <li>Create, open, and save project workspaces with custom job names.</li>
+                    <li>Assign input source folders and output directories for each project.</li>
+                    <li>Resume work quickly from recently opened projects.</li>
+                    <li>Protect unsaved changes with intelligent state tracking.</li>
+                </ul>
+            </article>
+
+            <article class="feature-card">
+                <h3>PDF Splitting</h3>
+                <ul>
+                    <li>Split documents by page range, fixed interval, or logical breakpoints.</li>
+                    <li>AI-based split uses local LLama models to detect document boundaries automatically.</li>
+                    <li>Preview files inside the built-in file explorer before processing.</li>
+                    <li>Batch split many PDFs in one operation.</li>
+                </ul>
+            </article>
+
+            <article class="feature-card">
+                <h3>PDF Redaction</h3>
+                <ul>
+                    <li>Draw manual redaction rectangles directly on PDF previews.</li>
+                    <li>AI-based redaction identifies sensitive terms and suggests redaction targets.</li>
+                    <li>Save custom redaction presets with color, label, and category.</li>
+                    <li>Track and edit redaction reasons per page with visual feedback.</li>
+                </ul>
+            </article>
+
+            <article class="feature-card">
+                <h3>Bates Numbering & Branding</h3>
+                <ul>
+                    <li>Apply sequential Bates numbers across documents and exhibits.</li>
+                    <li>Customize numbering format, position, font, and opacity.</li>
+                    <li>Brand document sets with firm identifiers and headers/footers.</li>
+                    <li>Process multiple files in batch with consistent numbering.</li>
+                </ul>
+            </article>
+
+            <article class="feature-card">
+                <h3>Binder Building</h3>
+                <ul>
+                    <li>Combine multiple PDFs into a single exhibit binder.</li>
+                    <li>Add custom headers, footers, document IDs, and order controls.</li>
+                    <li>Build professional submission-ready binders for court and discovery.</li>
+                </ul>
+            </article>
+
+            <article class="feature-card">
+                <h3>Export & Delivery</h3>
+                <ul>
+                    <li>Export processed PDFs to local directories reliably.</li>
+                    <li>Send secure files via SFTP to remote servers.</li>
+                    <li>Track export status with error handling and logs.</li>
+                    <li>Generate compliance-ready redaction logs in CSV or text format.</li>
+                </ul>
+            </article>
+
+            <article class="feature-card">
+                <h3>AI Integration</h3>
+                <ul>
+                    <li>Run local LLama models for document analysis without the cloud.</li>
+                    <li>Configure custom AI goals for terms, boundaries, and redaction targets.</li>
+                    <li>Manage models, downloads, and offline inference settings.</li>
+                </ul>
+            </article>
+
+            <article class="feature-card">
+                <h3>Settings & Configuration</h3>
+                <ul>
+                    <li>Set up AI models and SFTP servers from one central console.</li>
+                    <li>Manage license activation, trial status, and application preferences.</li>
+                    <li>Secure the app and keep your legal workflows offline.</li>
+                </ul>
+            </article>
+        </div>
+    </main>
+
+    <footer>
+        <p>Legal PDF Studio v2 Beta — local-first, secure, and built for legal teams.</p>
+        <p>© 2025 Legal PDF Studio. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>
