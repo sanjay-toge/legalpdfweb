@@ -523,6 +523,7 @@
         .platform-download { display: block; width: 100%; padding: 13px 16px; border-radius: 10px; text-align: center; text-decoration: none; font-weight: 700; color: #000; background: var(--accent-gold); transition: var(--transition); }
         .platform-download:hover { transform: translateY(-2px); }
         .platform-download[aria-disabled="true"] { color: var(--text-secondary); background: rgba(255,255,255,.08); cursor: not-allowed; pointer-events: none; }
+        .mac-download-links { display: grid; gap: 10px; }
         .download-help { color: var(--text-secondary); font-size: .82rem; margin-top: 20px; }
         @media (max-width: 650px) { .download-panel { padding: 42px 22px; } .download-panel h2 { font-size: 2.5rem; } .download-options { grid-template-columns: 1fr; } }
 
@@ -1073,9 +1074,12 @@
                     <span class="recommended-label">Recommended for your device</span>
                     <div class="platform-icon" aria-hidden="true">⌘</div>
                     <h3>macOS</h3>
-                    <p>For Mac computers, depending on the published build architecture</p>
-                    <a id="mac-download-link" class="platform-download" href="#" aria-disabled="true" tabindex="-1">macOS installer coming soon</a>
-                    <div id="mac-download-note" class="download-help">The macOS installer will appear here when its release is published.</div>
+                    <p>macOS 12 or later · Choose the build for your Mac</p>
+                    <div class="mac-download-links">
+                        <a id="mac-arm-download-link" class="platform-download" href="#" aria-disabled="true" tabindex="-1">Apple Silicon (M1–M5)</a>
+                        <a id="mac-intel-download-link" class="platform-download" href="#" aria-disabled="true" tabindex="-1">Intel Mac</a>
+                    </div>
+                    <div id="mac-download-note" class="download-help">macOS installers will appear here when the builds are published.</div>
                 </article>
             </div>
             <div class="download-meta">Downloads are provided through the official Legal PDF Studio GitHub releases.</div>
@@ -1241,7 +1245,8 @@
                     return null;
                 };
                 const windows = findAsset([/^LegalPdfStudio_Setup\.exe$/i, /setup.*\.(exe|msi)$/i]);
-                const mac = findAsset([/\.dmg$/i, /\.pkg$/i, /(?:mac|macos|osx|darwin).*\.zip$/i]);
+                const macArm = findAsset([/^LegalPdfStudio-macOS-arm64\.dmg$/i]);
+                const macIntel = findAsset([/^LegalPdfStudio-macOS-x64\.dmg$/i]);
 
                 if (windows) {
                     const link = document.getElementById("windows-download-link");
@@ -1250,16 +1255,25 @@
                 } else {
                     document.getElementById("windows-download-note").textContent = "No Windows installer is currently published.";
                 }
-                if (mac) {
-                    const link = document.getElementById("mac-download-link");
-                    link.href = mac.asset.browser_download_url;
-                    link.removeAttribute("aria-disabled");
-                    link.removeAttribute("tabindex");
-                    link.textContent = "Download for macOS";
-                    document.getElementById("mac-download-note").textContent = "Release " + mac.tag + " · " + mac.asset.name;
-                } else {
-                    document.getElementById("mac-download-note").textContent = "The macOS build is not published yet. Check back when the first macOS release is available.";
-                }
+                const enableMacDownload = (elementId, releaseAsset) => {
+                    const link = document.getElementById(elementId);
+                    if (releaseAsset) {
+                        link.href = releaseAsset.asset.browser_download_url;
+                        link.removeAttribute("aria-disabled");
+                        link.removeAttribute("tabindex");
+                    } else {
+                        link.setAttribute("aria-disabled", "true");
+                        link.setAttribute("tabindex", "-1");
+                    }
+                };
+                enableMacDownload("mac-arm-download-link", macArm);
+                enableMacDownload("mac-intel-download-link", macIntel);
+                const macNotes = [];
+                if (macArm) macNotes.push("Apple Silicon: " + macArm.tag);
+                if (macIntel) macNotes.push("Intel: " + macIntel.tag);
+                document.getElementById("mac-download-note").textContent = macNotes.length
+                    ? macNotes.join(" · ")
+                    : "The macOS builds are not published yet. Check back when the first macOS release is available.";
             } catch (error) {
                 document.getElementById("windows-download-note").textContent = "Could not check releases. The existing Windows download remains available.";
                 document.getElementById("mac-download-note").textContent = "Could not check releases right now. Please try again later.";
