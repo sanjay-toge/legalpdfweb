@@ -1240,7 +1240,7 @@
                     }
                     return null;
                 };
-                const windows = findAsset([/\.exe$/i, /\.msi$/i]);
+                const windows = findAsset([/^LegalPdfStudio_Setup\.exe$/i, /setup.*\.(exe|msi)$/i]);
                 const mac = findAsset([/\.dmg$/i, /\.pkg$/i, /(?:mac|macos|osx|darwin).*\.zip$/i]);
 
                 if (windows) {
